@@ -1,7 +1,11 @@
 package me.ssoon.demoinflearnrestapi.events;
 
+import static org.springframework.hateoas.MediaTypes.*;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,11 +55,14 @@ public class EventControllerTest {
     mockMvc
         .perform(post("/api/events")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .accept(MediaTypes.HAL_JSON)
+            .accept(HAL_JSON)
             .content(objectMapper.writeValueAsString(event))
         )
         .andDo(print())
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").exists());
+        .andExpect(jsonPath("id").exists())
+        .andExpect(header().exists(LOCATION))
+        .andExpect(header().string(CONTENT_TYPE, HAL_JSON_UTF8_VALUE))
+    ;
   }
 }
