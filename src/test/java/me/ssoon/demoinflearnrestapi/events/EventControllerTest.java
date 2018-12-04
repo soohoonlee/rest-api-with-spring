@@ -131,9 +131,13 @@ public class EventControllerTest {
 
     this.mockMvc.perform(post("/api/events")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .accept(HAL_JSON)
         .content(objectMapper.writeValueAsString(eventDto))
     )
-        .andExpect(status().isBadRequest());
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$[0].objectName").exists())
+        .andExpect(jsonPath("$[0].defaultMessage").exists())
+        .andExpect(jsonPath("$[0].code").exists())
+    ;
   }
 }
