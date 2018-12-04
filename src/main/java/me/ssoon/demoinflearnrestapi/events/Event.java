@@ -1,5 +1,7 @@
 package me.ssoon.demoinflearnrestapi.events;
 
+import static me.ssoon.demoinflearnrestapi.events.EventStatus.*;
+
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -38,5 +40,5 @@ public class Event {
   private boolean offline;
   private boolean free;
   @Enumerated(EnumType.STRING)
-  private EventStatus eventStatus;
+  private EventStatus eventStatus = DRAFT;
 }

@@ -3,6 +3,7 @@ package me.ssoon.demoinflearnrestapi.events;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.net.URI;
+import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,14 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/api/events", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class EventController {
 
-  private EventRepository eventRepository;
+  private final EventRepository eventRepository;
+  private final ModelMapper modelMapper;
 
-  public EventController(final EventRepository eventRepository) {
+  public EventController(final EventRepository eventRepository, final ModelMapper modelMapper) {
     this.eventRepository = eventRepository;
+    this.modelMapper = modelMapper;
   }
 
   @PostMapping
-  public ResponseEntity createdEvent(final @RequestBody Event event) {
+  public ResponseEntity createdEvent(final @RequestBody EventDto eventDto) {
+    final Event event = modelMapper.map(eventDto, Event.class);
     final Event newEvent = this.eventRepository.save(event);
     final URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
     return ResponseEntity.created(createdUri).body(event);
