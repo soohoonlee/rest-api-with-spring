@@ -19,14 +19,21 @@ public class EventController {
 
   private final EventRepository eventRepository;
   private final ModelMapper modelMapper;
+  private final EventValidator eventValidator;
 
-  public EventController(final EventRepository eventRepository, final ModelMapper modelMapper) {
+  public EventController(final EventRepository eventRepository, final ModelMapper modelMapper,
+      final EventValidator eventValidator) {
     this.eventRepository = eventRepository;
     this.modelMapper = modelMapper;
+    this.eventValidator = eventValidator;
   }
 
   @PostMapping
   public ResponseEntity createdEvent(final @RequestBody @Valid EventDto eventDto, final Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().build();
+    }
+    eventValidator.validate(eventDto, errors);
     if (errors.hasErrors()) {
       return ResponseEntity.badRequest().build();
     }
