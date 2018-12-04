@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import me.ssoon.demoinflearnrestapi.common.TestDescription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class EventControllerTest {
   private ObjectMapper objectMapper;
 
   @Test
+  @TestDescription("정상적으로 이벤트를 생성하는 테스트")
   public void createEvent() throws Exception {
     final EventDto event = EventDto.builder()
         .name("Spring")
@@ -68,6 +70,7 @@ public class EventControllerTest {
   }
 
   @Test
+  @TestDescription("입력 받을 수 없는 값을 사용한 경우에 에러가 발생하는 테스트")
   public void createEventBadRequest() throws Exception {
     final Event event = Event.builder()
         .id(100)
@@ -98,6 +101,7 @@ public class EventControllerTest {
   }
 
   @Test
+  @TestDescription("입력 값이 비어있는 경우에 에러가 발생하는 테스트")
   public void createEventBadRequestEmptyInput() throws Exception {
     final EventDto eventDto = EventDto.builder().build();
 
@@ -110,6 +114,7 @@ public class EventControllerTest {
   }
 
   @Test
+  @TestDescription("입력 값이 잘못된 경우에 에러가 발생하는 테스트")
   public void createEventBadRequestWrongInput() throws Exception {
     final EventDto eventDto = EventDto.builder()
         .name("Spring")
