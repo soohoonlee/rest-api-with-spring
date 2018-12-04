@@ -36,7 +36,7 @@ public class EventControllerTest {
   private ObjectMapper objectMapper;
 
   @Test
-  public void createdEvent() throws Exception {
+  public void createEvent() throws Exception {
     final EventDto event = EventDto.builder()
         .name("Spring")
         .description("REST API Development with Spring")
@@ -68,7 +68,7 @@ public class EventControllerTest {
   }
 
   @Test
-  public void createdEventBadRequest() throws Exception {
+  public void createEventBadRequest() throws Exception {
     final Event event = Event.builder()
         .id(100)
         .name("Spring")
@@ -95,5 +95,17 @@ public class EventControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest())
     ;
+  }
+
+  @Test
+  public void createEventBadRequestEmptyInput() throws Exception {
+    final EventDto eventDto = EventDto.builder().build();
+
+    this.mockMvc.perform(post("/api/events")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .accept(HAL_JSON)
+        .content(objectMapper.writeValueAsString(eventDto))
+    )
+        .andExpect(status().isBadRequest());
   }
 }
