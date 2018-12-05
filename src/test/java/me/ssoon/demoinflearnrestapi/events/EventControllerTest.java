@@ -63,8 +63,8 @@ public class EventControllerTest {
         .andExpect(jsonPath("id").exists())
         .andExpect(header().exists(LOCATION))
         .andExpect(header().string(CONTENT_TYPE, HAL_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("id").value(not(100)))
-        .andExpect(jsonPath("free").value(not(true)))
+        .andExpect(jsonPath("free").value(false))
+        .andExpect(jsonPath("offline").value(true))
         .andExpect(jsonPath("eventStatus").value(DRAFT.name()))
     ;
   }
