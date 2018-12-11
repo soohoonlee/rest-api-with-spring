@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.net.URI;
 import javax.validation.Valid;
+import me.ssoon.demoinflearnrestapi.common.ErrorsResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -33,11 +34,11 @@ public class EventController {
   @PostMapping
   public ResponseEntity createdEvent(final @RequestBody @Valid EventDto eventDto, final Errors errors) {
     if (errors.hasErrors()) {
-      return ResponseEntity.badRequest().body(errors);
+      return badRequest(errors);
     }
     eventValidator.validate(eventDto, errors);
     if (errors.hasErrors()) {
-      return ResponseEntity.badRequest().body(errors);
+      return badRequest(errors);
     }
     final Event event = modelMapper.map(eventDto, Event.class);
     event.update();
@@ -49,5 +50,9 @@ public class EventController {
     eventResource.add(selfLinkBuilder.withRel("update-event"));
     eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
     return ResponseEntity.created(createdUri).body(eventResource);
+  }
+
+  private ResponseEntity badRequest(final Errors errors) {
+    return ResponseEntity.badRequest().body(new ErrorsResource(errors));
   }
 }
