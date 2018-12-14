@@ -8,12 +8,14 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.ssoon.demoinflearnrestapi.accounts.Account;
 
 @Builder
 @AllArgsConstructor
@@ -41,6 +43,8 @@ public class Event {
   private boolean free;
   @Enumerated(EnumType.STRING)
   private EventStatus eventStatus = DRAFT;
+  @ManyToOne
+  private Account manager;
 
   public void update() {
     // Update free
