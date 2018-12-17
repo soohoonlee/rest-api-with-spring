@@ -52,16 +52,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     web.ignoring().mvcMatchers("/docs/index.html");
     web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
   }
-
-  @Override
-  protected void configure(final HttpSecurity http) throws Exception {
-    http
-        .anonymous()
-          .and()
-        .formLogin()
-          .and()
-        .authorizeRequests()
-          .mvcMatchers(GET, "/api/**").authenticated()
-          .anyRequest().authenticated();
-  }
 }
