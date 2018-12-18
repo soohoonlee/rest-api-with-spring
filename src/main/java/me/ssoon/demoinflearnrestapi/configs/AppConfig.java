@@ -6,6 +6,7 @@ import static me.ssoon.demoinflearnrestapi.accounts.AccountRole.USER;
 import java.util.Set;
 import me.ssoon.demoinflearnrestapi.accounts.Account;
 import me.ssoon.demoinflearnrestapi.accounts.AccountService;
+import me.ssoon.demoinflearnrestapi.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -35,11 +36,24 @@ public class AppConfig {
       @Autowired
       private AccountService accountService;
 
+      @Autowired
+      private AppProperties appProperties;
+
       @Override
       public void run(final ApplicationArguments args) throws Exception {
-        final Account account = Account.builder().email("jjinimania@gmail.com").password("soohoon")
-            .roles(Set.of(ADMIN, USER)).build();
-        accountService.saveAccount(account);
+        final Account admin = Account.builder()
+            .email(appProperties.getAdminUsername())
+            .password(appProperties.getAdminPassword())
+            .roles(Set.of(ADMIN, USER))
+            .build();
+        accountService.saveAccount(admin);
+
+        final Account user = Account.builder()
+            .email(appProperties.getUserUsername())
+            .password(appProperties.getUserPassword())
+            .roles(Set.of(USER))
+            .build();
+        accountService.saveAccount(user);
       }
     };
   }
