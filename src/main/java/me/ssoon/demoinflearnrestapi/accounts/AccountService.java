@@ -34,12 +34,6 @@ public class AccountService implements UserDetailsService {
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
     final Account account = accountRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException(username));
-    return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
-  }
-
-  private Collection<? extends GrantedAuthority> authorities(final Set<AccountRole> roles) {
-    return roles.stream()
-        .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
-        .collect(Collectors.toSet());
+    return new AccountAdapter(account);
   }
 }
