@@ -2,6 +2,7 @@ package me.ssoon.demoinflearnrestapi.events;
 
 import static me.ssoon.demoinflearnrestapi.events.EventStatus.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.ssoon.demoinflearnrestapi.accounts.Account;
+import me.ssoon.demoinflearnrestapi.accounts.AccountSerializer;
 
 @Builder
 @AllArgsConstructor
@@ -44,6 +46,7 @@ public class Event {
   @Enumerated(EnumType.STRING)
   private EventStatus eventStatus = DRAFT;
   @ManyToOne
+  @JsonSerialize(using = AccountSerializer.class)
   private Account manager;
 
   public void update() {
